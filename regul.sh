@@ -9,7 +9,7 @@ do
 	echo TEMP REGULATION IS ACTIVE
 	temp1=$(cgminer-api stats | grep temp1] | awk '{print $3}') 
 	temp2=$(cgminer-api stats | grep temp2] | awk '{print $3}')
-	maxtemp=$((	$temp1 > $temp2 ? $temp1 : $temp2 ))
+	maxtemp=$(( $temp1 > $temp2 ? $temp1 : $temp2 ))
 	echo Temperature: $maxtemp
 	freq=$(cgminer-api stats | grep frequency] | awk '{print $3}')
 	echo Frequence: $freq
