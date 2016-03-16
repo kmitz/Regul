@@ -24,7 +24,7 @@ do
 	if [ $maxtemp -gt $TMAX ]
 	then 
 		echo "Aaahhhhhh!! I'm burning!! $maxtemp Celsius degrees";
-		newFreq=$(cat freqList | grep -A "$FREQ_STEP" "$freq" | tail -n 1)
+		newFreq=$(cat freqList | grep -A "$FREQ_STEP" "$freq:" | tail -n 1)
 		echo New Frequency: $newFreq	
 	        sed -i "/bitmain-freq/c\"bitmain-freq\" : \"$newFreq\"," /config/cgminer.conf;    
 		echo Restarting...
@@ -33,7 +33,7 @@ do
 	elif [ $maxtemp -lt $TMIN ]
 	then
 		echo "Increase the power...!! Only $maxtemp Celsius degrees"
-		newFreq=$(cat freqList | grep -B "$FREQ_STEP" "$freq" | head -n 1)
+		newFreq=$(cat freqList | grep -B "$FREQ_STEP" "$freq:" | head -n 1)
 		echo New Frequency: $newFreq
 		sed -i "/bitmain-freq/c\"bitmain-freq\" : \"$newFreq\"," /config/cgminer.conf;
 		echo Restarting
