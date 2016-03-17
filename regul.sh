@@ -3,6 +3,8 @@ TMIN=58				#Below this temp, the frequency will be increased
 TMAX=62				#Above this temp, the frequency will be decreased
 REFRESH_TIMER=1200  #The temperature is checked every 1200s
 FREQ_STEP=4 #Each step is 6.25MHz, so with FREQ_STEP=4 that's a 6.25*4=25MHz frequency increase of decrease
+MIN_FREQ=100
+MAX_FREQ=400
 while true
 do
 	date
@@ -21,7 +23,7 @@ do
 	echo Temperature: $maxtemp
 	freq=$(cgminer-api stats | grep frequency] | awk '{print $3}')
 	echo Frequence: $freq
-	if [ $maxtemp -gt $TMAX ]
+	if [ $maxtemp -gt $TMAX ] && [ $freq -gt $MIN_FREQ]
 	then 
 		echo "Aaahhhhhh!! I'm burning!! $maxtemp Celsius degrees";
 		newFreq=$(cat freqList | grep -A "$FREQ_STEP" "$freq:" | tail -n 1)
@@ -30,7 +32,7 @@ do
 		echo Restarting...
 		sleep 1s
 		/etc/init.d/cgminer.sh restart
-	elif [ $maxtemp -lt $TMIN ]
+	elif [ $maxtemp -lt $TMIN ] && [ $freq -lt $MAX_FREQ ]
 	then
 		echo "Increase the power...!! Only $maxtemp Celsius degrees"
 		newFreq=$(cat freqList | grep -B "$FREQ_STEP" "$freq:" | head -n 1)
@@ -40,7 +42,7 @@ do
 		sleep 1s
 		/etc/init.d/cgminer.sh restart
 	else
-		echo "Temp OK: $maxtemp Celsius degrees";
+		echo "Frequency unchanged. Temp: $maxtemp Celsius degrees";
 	fi
 
 	sleep $REFRESH_TIMER
