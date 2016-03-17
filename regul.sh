@@ -23,7 +23,7 @@ do
 	echo Temperature: $maxtemp
 	freq=$(cgminer-api stats | grep frequency] | awk '{print $3}')
 	echo Frequence: $freq
-	if [ $maxtemp -gt $TMAX ] && [ $freq -gt $MIN_FREQ]
+	if [ $maxtemp -gt $TMAX ] && [ $freq -gt $MIN_FREQ ]
 	then 
 		echo "Aaahhhhhh!! I'm burning!! $maxtemp Celsius degrees";
 		newFreq=$(cat freqList | grep -A "$FREQ_STEP" "$freq:" | tail -n 1)
